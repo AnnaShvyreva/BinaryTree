@@ -35,7 +35,8 @@ private:
 	MyNode* head;
 	void prInsert (MyNode* node, T keyValue); 
 	void prRemove (MyNode* node, T keyValue); 
-	T& prFind(MyNode* node, T const keyValue);
+	bool prFind(MyNode* node, T const keyValue, bool& res);
+	void infixTraverse (std::ostream& out, MyNode* node);
 
 	MyNode* prGetParent(MyNode* node, T keyValue)
 	{
@@ -63,14 +64,21 @@ public:
 		head = new MyNode(keyValue);
 	}
 
-	~MyBinaryTree() { clear(); }
+	~MyBinaryTree()
+	{
+		clear(); 
+	}
 	
 	void insert (T const keyValue); 
 	void remove (T const keyValue);
-	T& find (T const keyValue);
-	void infixTraverse (MyBinaryTree tree);
-	void assotiation (MyBinaryTree tree1, MyBinaryTree tree2);
-	void balancing (MyBinaryTree tree);
+	bool find (T const keyValue);
+	MyNode& get_head(MyBinaryTree<T>& tree)
+	{
+		return tree->head;
+	}
+
+//	void assotiation (MyBinaryTree tree1, MyBinaryTree tree2);
+//	void balancing (MyBinaryTree tree);
 
 	MyNode* getParent(MyNode* node)
 	{
@@ -79,30 +87,40 @@ public:
 	};
 
 	void clear();
-	void deleteTree(MyNode node);
+	void deleteTree(MyNode* node);
 
+	friend std::ostream& operator << (std::ostream& out, MyBinaryTree<T>& tree)
+	{
+		if (tree.head != nullptr) 
+			tree.infixTraverse(out, tree.head);
+		return out;
+	};
 };
 
 template <class T> void MyBinaryTree<T>::clear()
 {
 	//deleteNode(head);
 	deleteTree(head);
+	head->data = NULL;
+	head ->left = nullptr;
+	head->right=nullptr;
 	delete head;
+	head = NULL;
 }
 
-template <class T>
-void MyBinaryTree<T>::deleteTree(MyNode node)
+
+template <class T> void MyBinaryTree<T>::deleteTree(MyNode* node)
 {
 	if (node -> left) 
-			{
-				deleteTree(node->left);
-				delete node->left;
-			}
-			if (node->right)
-			{
-				deleteTree(node->right);
-				delete node->right;
-			}
+	{
+		deleteTree(node->left);
+		delete node->left;
+	}
+	if (node->right)
+	{
+		deleteTree(node->right);
+		delete node->right;
+	}
 }
 
 template <class T> void MyBinaryTree<T>::prInsert (MyNode* node, T keyValue)
@@ -185,17 +203,20 @@ template <class T> void MyBinaryTree<T>::prRemove(MyNode* node, T keyValue)
 			{
 				node->right->left = node->left;
 
-				MyNode* n = getParent(node);
-				if (n->left == node) n->left = node->right;
-				else if (n->right == node) n->right = node->right;
-
+//				MyNode* n = getParent(node);
+//				if (n->left == node) n->left = node->right;
+//				else if (n->right == node) n->right = node->right;
+				head = node->right;
 				node -> deleteNode();	
 			}
 			else
 			{
 				MyNode* n = prFindLeft(node->right);
-				node->data = n -> data;
-				n->deleteNode();
+				T data = n -> data;
+				
+				this -> remove(n->data);
+				node->data = data;
+				//n->deleteNode();
 			}
 		}
 
@@ -210,30 +231,42 @@ template <class T> void MyBinaryTree<T>::remove (T const keyValue)
 	}
 }
 
-template <class T> T& MyBinaryTree<T>::prFind(MyNode* node, T const keyValue)
+template <class T> bool MyBinaryTree<T>::prFind(MyNode* node, T const keyValue, bool& res)
 {
-	if (node->data == keyValue) return node;
-	else if (keyValue < node->data) prFind(node->left, keyValue);
-	else if (keyValue > node->data) prFind(node->right, keyValue);
+	if (node->data == keyValue) res=true;
+
+	else if (keyValue < node->data) 
+	{
+		if (node->left) prFind(node->left, keyValue, res);
+		else res=false;
+	}
+	else if (keyValue > node->data)
+	{
+		if (node->right) prFind(node->right, keyValue, res);
+		else res=false;
+	}
+	return res;
 }
 
-template <class T> T& MyBinaryTree<T>::find(T const keyValue)
+template <class T> bool MyBinaryTree<T>::find(T const keyValue)
 {
+	bool res = NULL;
 	if (!head) std::cout << "Tree is empty";
 	else
 	{
-		prFind(head, keyValue);
+		return prFind(head, keyValue, res);
 	}
+	return false;
 }
 
-template <class T> void MyBinaryTree<T>::infixTraverse(MyBinaryTree tree)
+template <class T> void MyBinaryTree<T>::infixTraverse(std::ostream& out, MyNode* node)
 {
-	if (head)
+	if (node)
 	{
-		if (head->left) infixTraverse(head->left);
-		else std::cout << head->data<<" ";
+		if (node->left) infixTraverse(out, node->left);
 
-		if (head->right) infixTraverse(head->right);
-		else std::cout << head->data<<" ";
+		if (node->right) infixTraverse(out, node->right);
+
+		out << node->data<<" ";
 	}
 }
