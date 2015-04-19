@@ -6,7 +6,6 @@ template <class T> class MyBinaryTree
 private:
 
 	struct MyNode {
-		//MyDate date;
 		T data;
 		MyNode* left;
 		MyNode* right;
@@ -27,29 +26,38 @@ private:
 			{
 				right = nullptr;
 			}
-			data = NULL;
-			delete this;
+			//data = 0;
 		};
 	};
 
 	MyNode* head;
-	void prInsert (MyNode* node, T keyValue); 
+	void prInsert (MyNode* node, T keyValue);
 	void prRemove (MyNode* node, T keyValue); 
 	bool prFind(MyNode* node, T const keyValue, bool& res);
 	void infixTraverse (std::ostream& out, MyNode* node);
 
 	MyNode* prGetParent(MyNode* node, T keyValue)
 	{
-		if ((node->data>keyValue)&&(node->left->data != keyValue)) prGetParent(node->left, keyValue);
-		else if ((node->data<keyValue)&&(node->right->data != keyValue)) prGetParent(node->right, keyValue);
-		else if (node->left->data == keyValue) return node;
-		else if (node->right->data == keyValue) return node;
+		if ((max(node->data,keyValue)>0)&&(max(node->left->data,keyValue)!=0)) prGetParent(node->left, keyValue);
+		else if ((max(node->data,keyValue)<0)&&(max(node->right->data,keyValue)!=0)) prGetParent(node->right, keyValue);
+		else if (max(node->left->data,keyValue)==0) return node;
+		else if (max(node->right->data,keyValue)==0) return node;
 	}
+
+//	MyNode* prGetParent(MyNode* node, const char* keyValue)
+//	{
+//		if ((max(node->data,keyValue)==1)&&(node->left->data != keyValue)) prGetParent(node->left, keyValue);
+//		else if ((max(node->data,keyValue)==-1)&&(node->right->data != keyValue)) prGetParent(node->right, keyValue);
+//		else if (node->left->data == keyValue) return node;
+//		else if (node->right->data == keyValue) return node;
+//	}
 
 	MyNode* prFindLeft(MyNode* node)
 	{
 		if (node->left) prFindLeft(node->left);
 		else return node;
+
+		//return node; ////////////////////////////////////////////////////////////////////
 	}
 
 public:
@@ -64,17 +72,14 @@ public:
 		head = new MyNode(keyValue);
 	}
 
-	~MyBinaryTree()
-	{
-		clear(); 
-	}
+	~MyBinaryTree()	{clear(); }
 	
 	void insert (T const keyValue); 
 	void remove (T const keyValue);
 	bool find (T const keyValue);
 	MyNode& get_head(MyBinaryTree<T>& tree)
 	{
-		return tree->head;
+		return tree.head;
 	}
 
 //	void assotiation (MyBinaryTree tree1, MyBinaryTree tree2);
@@ -82,8 +87,10 @@ public:
 
 	MyNode* getParent(MyNode* node)
 	{
-		if (head->data == node->data) return nullptr;
-		else prGetParent(head, node->data);
+		if (max(head->data,node->data)!=0) 
+			prGetParent(head, node->data);
+		else return nullptr;
+		//return node; ////////////////////////////////////////////////////////////////////
 	};
 
 	void clear();
@@ -95,6 +102,9 @@ public:
 			tree.infixTraverse(out, tree.head);
 		return out;
 	};
+
+	int max (T const a, T const b);
+
 };
 
 template <class T> void MyBinaryTree<T>::clear()
@@ -107,7 +117,6 @@ template <class T> void MyBinaryTree<T>::clear()
 	delete head;
 	head = NULL;
 }
-
 
 template <class T> void MyBinaryTree<T>::deleteTree(MyNode* node)
 {
@@ -125,7 +134,7 @@ template <class T> void MyBinaryTree<T>::deleteTree(MyNode* node)
 
 template <class T> void MyBinaryTree<T>::prInsert (MyNode* node, T keyValue)
 {
-	if((node->data)>keyValue)
+	if(max(node->data,keyValue)==1)
 	{
 		if (!node->left)
 		{
@@ -136,7 +145,7 @@ template <class T> void MyBinaryTree<T>::prInsert (MyNode* node, T keyValue)
 			prInsert(node->left, keyValue);
 		}
 	}
-	else if ((node->data)<keyValue)
+	else if (max(node->data,keyValue)==-1)
 	{
 		if (!node->right)
 		{
@@ -164,50 +173,61 @@ template <class T> void MyBinaryTree<T>::insert (T const keyValue)
 
 template <class T> void MyBinaryTree<T>::prRemove(MyNode* node, T keyValue)
 {
-	if (keyValue < node->data) 
+	if (max(node->data,keyValue) == 1) 
 	{
 		prRemove(node->left, keyValue);
 	}
-	else if(keyValue > node->data)
+	else if(max(node->data,keyValue) == -1)
 	{
 		prRemove(node->right, keyValue);
 	}
-	else if(keyValue == node->data)
+	else if(max(node->data,keyValue) == 0)
 	{
 		if ((!node->left)&&(!node->right))
 		{
-			MyNode* n = getParent(node);
-			if (n->left == node) n->left = nullptr;
-			else if (n->right == node) n->right = nullptr;
-			node -> deleteNode();
+			if (node == head)
+				node ->deleteNode();
+			else
+			{
+				MyNode* n = getParent(node);
+				if (n->left == node) n->left = nullptr;
+				else if (n->right == node) n->right = nullptr;
+				node -> deleteNode();
+			}
 		}
 		else if ((node->left)&&(!node->right))
 		{
-			MyNode* n = getParent(node);
-			if (n->left->data == node->data) n->left = node->left;
-			else if (n->right == node) n->right = node->left;
+			if (node == head)
+				head = node -> left;
+			else
+			{
+				MyNode* n = getParent(node);
+				if (max(n->left->data,node->data)==0) n->left = node->left;
+				else if (n->right == node) n->right = node->left;
+			}
+			node -> deleteNode();	
 
-			node -> deleteNode();			
 		}
 		else if ((!node->left)&&(node->right))
 		{
-			MyNode* n = getParent(node);
-			if (n->left == node) n->left = node->right;
-			else if (n->right == node) n->right = node->right;
-
+			if (node == head)
+				head = node -> right;
+			else
+			{
+				MyNode* n = getParent(node);
+				if (n->left == node) n->left = node->right;
+				else if (n->right == node) n->right = node->right;
+			}
 			node -> deleteNode();			
 		}
 		else if ((node->left)&&(node->right))
 		{
 			if (!node->right->left)
 			{
-				node->right->left = node->left;
-
-//				MyNode* n = getParent(node);
-//				if (n->left == node) n->left = node->right;
-//				else if (n->right == node) n->right = node->right;
-				head = node->right;
-				node -> deleteNode();	
+				node->data=node->right->data;
+				MyNode* nn = node -> right;	
+				node->right = node->right->right;
+				delete nn;
 			}
 			else
 			{
@@ -233,14 +253,14 @@ template <class T> void MyBinaryTree<T>::remove (T const keyValue)
 
 template <class T> bool MyBinaryTree<T>::prFind(MyNode* node, T const keyValue, bool& res)
 {
-	if (node->data == keyValue) res=true;
+	if (max(node->data,keyValue) == 0) res=true;
 
-	else if (keyValue < node->data) 
+	else if (max(keyValue, node->data)== -1) 
 	{
 		if (node->left) prFind(node->left, keyValue, res);
 		else res=false;
 	}
-	else if (keyValue > node->data)
+	else if (max(keyValue, node->data) == 1)
 	{
 		if (node->right) prFind(node->right, keyValue, res);
 		else res=false;
@@ -259,6 +279,18 @@ template <class T> bool MyBinaryTree<T>::find(T const keyValue)
 	return false;
 }
 
+template <> void MyBinaryTree<std::string>::infixTraverse(std::ostream& out, MyNode* node)
+{
+	if (node)
+	{
+		if (node->left) infixTraverse(out, node->left);
+
+		if (node->right) infixTraverse(out, node->right);
+
+		out << node->data.c_str()<<" ";
+	}
+}
+
 template <class T> void MyBinaryTree<T>::infixTraverse(std::ostream& out, MyNode* node)
 {
 	if (node)
@@ -269,4 +301,32 @@ template <class T> void MyBinaryTree<T>::infixTraverse(std::ostream& out, MyNode
 
 		out << node->data<<" ";
 	}
+}
+
+
+template <> int MyBinaryTree<const char*>::max (const char* a, const char* b)
+{		
+	if (strcmp(a,b)>0) 
+		return 1;
+	else if (strcmp(a,b)<0)
+		return -1;
+	else return 0;
+}
+
+template <> int MyBinaryTree<std::string>::max(std::string a, std::string b)
+{		
+	if (strcmp(a.c_str(),b.c_str())>0) 
+		return 1;
+	else if (strcmp(a.c_str(),b.c_str())<0)
+		return -1;
+	else return 0;
+}
+
+template<class T> int MyBinaryTree<T>::max (T a, T b)
+{		
+	if (a>b) 
+		return 1;
+	else if (a<b)
+		return -1;
+	else return 0;
 }
