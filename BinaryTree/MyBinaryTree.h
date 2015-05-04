@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <stack>
 
 template <class T> class MyBinaryTree
 {
@@ -44,20 +45,10 @@ private:
 		else if (max(node->right->data,keyValue)==0) return node;
 	}
 
-//	MyNode* prGetParent(MyNode* node, const char* keyValue)
-//	{
-//		if ((max(node->data,keyValue)==1)&&(node->left->data != keyValue)) prGetParent(node->left, keyValue);
-//		else if ((max(node->data,keyValue)==-1)&&(node->right->data != keyValue)) prGetParent(node->right, keyValue);
-//		else if (node->left->data == keyValue) return node;
-//		else if (node->right->data == keyValue) return node;
-//	}
-
 	MyNode* prFindLeft(MyNode* node)
 	{
 		if (node->left) prFindLeft(node->left);
 		else return node;
-
-		//return node; ////////////////////////////////////////////////////////////////////
 	}
 
 public:
@@ -82,15 +73,11 @@ public:
 		return tree.head;
 	}
 
-//	void assotiation (MyBinaryTree tree1, MyBinaryTree tree2);
-//	void balancing (MyBinaryTree tree);
-
 	MyNode* getParent(MyNode* node)
 	{
 		if (max(head->data,node->data)!=0) 
 			prGetParent(head, node->data);
 		else return nullptr;
-		//return node; ////////////////////////////////////////////////////////////////////
 	};
 
 	void clear();
@@ -111,7 +98,7 @@ template <class T> void MyBinaryTree<T>::clear()
 {
 	//deleteNode(head);
 	deleteTree(head);
-	head->data = NULL;
+	
 	head ->left = nullptr;
 	head->right=nullptr;
 	delete head;
@@ -285,9 +272,11 @@ template <> void MyBinaryTree<std::string>::infixTraverse(std::ostream& out, MyN
 	{
 		if (node->left) infixTraverse(out, node->left);
 
+		out << node->data.c_str()<<" ";
+
 		if (node->right) infixTraverse(out, node->right);
 
-		out << node->data.c_str()<<" ";
+		//out << node->data.c_str()<<" ";
 	}
 }
 
@@ -297,9 +286,11 @@ template <class T> void MyBinaryTree<T>::infixTraverse(std::ostream& out, MyNode
 	{
 		if (node->left) infixTraverse(out, node->left);
 
+		out << node->data<<" ";
+
 		if (node->right) infixTraverse(out, node->right);
 
-		out << node->data<<" ";
+		//out << node->data<<" ";
 	}
 }
 

@@ -1,17 +1,25 @@
-﻿Построение начато 20.04.2015 1:49:03.
-     1>Проект "D:\c++\BinaryTree\BinaryTree\BinaryTree.vcxproj" в узле 2 (целевые объекты Build).
+﻿Построение начато 04.05.2015 12:29:16.
+     1>Проект "D:\c++\BinaryTree\BinaryTree\BinaryTree.vcxproj" в узле 2 (целевые объекты Rebuild).
      1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\BinaryTree.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\BinaryTree.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt BinaryTree.cpp
          BinaryTree.cpp
-     1>d:\c++\binarytree\binarytree\mybinarytree.h(94): warning C4715: MyBinaryTree<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >::getParent: значение возвращается не при всех путях выполнения
-     1>d:\c++\binarytree\binarytree\mybinarytree.h(61): warning C4715: MyBinaryTree<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >::prFindLeft: значение возвращается не при всех путях выполнения
-     1>d:\c++\binarytree\binarytree\mybinarytree.h(45): warning C4715: MyBinaryTree<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >::prGetParent: значение возвращается не при всех путях выполнения
+     1>d:\c++\binarytree\binarytree\mybinarytree.h(81): warning C4715: MyBinaryTree<int>::getParent: значение возвращается не при всех путях выполнения
+     1>d:\c++\binarytree\binarytree\mybinarytree.h(52): warning C4715: MyBinaryTree<int>::prFindLeft: значение возвращается не при всех путях выполнения
+     1>d:\c++\binarytree\binarytree\mybinarytree.h(52): warning C4715: MyBinaryTree<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >::prFindLeft: значение возвращается не при всех путях выполнения
+     1>d:\c++\binarytree\binarytree\mybinarytree.h(81): warning C4715: MyBinaryTree<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >::getParent: значение возвращается не при всех путях выполнения
+     1>d:\c++\binarytree\binarytree\mybinarytree.h(46): warning C4715: MyBinaryTree<int>::prGetParent: значение возвращается не при всех путях выполнения
+     1>d:\c++\binarytree\binarytree\mybinarytree.h(46): warning C4715: MyBinaryTree<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >::prGetParent: значение возвращается не при всех путях выполнения
+     1>d:\c++\binarytree\binarytree\mybinarytree.h(81): warning C4715: MyBinaryTree<char const *>::getParent: значение возвращается не при всех путях выполнения
+     1>d:\c++\binarytree\binarytree\mybinarytree.h(52): warning C4715: MyBinaryTree<char const *>::prFindLeft: значение возвращается не при всех путях выполнения
+     1>d:\c++\binarytree\binarytree\mybinarytree.h(46): warning C4715: MyBinaryTree<char const *>::prGetParent: значение возвращается не при всех путях выполнения
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\c++\BinaryTree\Debug\BinaryTree.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\c++\BinaryTree\Debug\BinaryTree.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\c++\BinaryTree\Debug\BinaryTree.lib" /MACHINE:X86 Debug\BinaryTree.obj
          Debug\stdafx.obj
          BinaryTree.vcxproj -> D:\c++\BinaryTree\Debug\BinaryTree.exe
-     1>Построение проекта "D:\c++\BinaryTree\BinaryTree\BinaryTree.vcxproj" завершено (целевые объекты Build).
+     1>Построение проекта "D:\c++\BinaryTree\BinaryTree\BinaryTree.vcxproj" завершено (целевые объекты Rebuild).
 
 Построение успешно завершено.
 
-Затраченное время: 00:00:01.27
+Затраченное время: 00:00:01.63
